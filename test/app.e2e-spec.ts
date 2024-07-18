@@ -21,4 +21,14 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  it('/ledger/074092 (GET)', () => {
+    return request(app.getHttpServer()).get('/').expect(200).expect({
+      userId: '074092',
+      balance: -40.8,
+      earned: 1.2,
+      spent: 12,
+      paidOut: 30,
+    });
+  });
 });
