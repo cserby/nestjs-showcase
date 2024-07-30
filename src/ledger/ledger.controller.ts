@@ -6,7 +6,7 @@ export class LedgerController {
   constructor(private readonly ledgerService: LedgerService) {}
 
   @Get(':userId')
-  findOne(@Param('userId') id: string) {
-    return this.ledgerService.forUserId(id);
+  async findOne(@Param('userId') id: string) {
+    return await this.ledgerService.forUserId(id);
   }
 }

@@ -6,7 +6,7 @@ export class PayoutsController {
   constructor(private readonly payoutsService: PayoutsService) {}
 
   @Get()
-  findAll() {
-    return this.payoutsService.getAll();
+  async findAll() {
+    return await this.payoutsService.getAll();
   }
 }

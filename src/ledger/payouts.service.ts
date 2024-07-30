@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { Payout } from './entities/payout.entity';
-import { transactions as mockTransactions } from './mockData/transactions';
+import { Transaction } from './entities/transaction.entity';
+import { TransactionService } from './transaction.service';
+import { getAll as getAllFromGenerator } from './generatorUtils';
 
 @Injectable()
 export class PayoutsService {
-  private readonly transactions = mockTransactions;
+  constructor(private transactionService: TransactionService) {}
 
-  getAll(): Payout[] {
+  private static payoutsFromTransactions(
+    transactions: Transaction[],
+  ): Payout[] {
     return Object.entries(
-      this.transactions
+      transactions
         .filter((t) => t.type === 'payout')
         .reduce(
           (payouts, t) => {
@@ -18,5 +22,11 @@ export class PayoutsService {
           {} as Record<string, number>,
         ),
     ).map(([userId, amount]) => ({ userId, amount }));
+  }
+
+  async getAll(): Promise<Payout[]> {
+    return PayoutsService.payoutsFromTransactions(
+      await getAllFromGenerator(this.transactionService.transactions()),
+    );
   }
 }
