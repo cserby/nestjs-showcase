@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { Ledger } from './entities/ledger.entity';
-import { transactions as mockTransactions } from './mockData/transactions';
+import { Transaction } from './entities/transaction.entity';
+import { TransactionService } from './transaction.service';
+import { getAll } from './generatorUtils';
 
 @Injectable()
 export class LedgerService {
-  private readonly transactions = mockTransactions;
+  constructor(private transactionService: TransactionService) {}
 
-  forUserId(userId: string): Ledger {
-    return this.transactions
+  private static ledgerForUserId(
+    userId: string,
+    transactions: Transaction[],
+  ): Ledger {
+    return transactions
       .filter((t) => t.userId === userId)
       .reduce(
         (ldgr, t) => {
@@ -37,5 +42,12 @@ export class LedgerService {
           paidOut: 0,
         },
       );
+  }
+
+  async forUserId(userId: string): Promise<Ledger> {
+    return LedgerService.ledgerForUserId(
+      userId,
+      await getAll(this.transactionService.transactions()),
+    );
   }
 }
