@@ -120,4 +120,20 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect([{ userId: '074092', amount: 30 }]);
   });
+
+  describe('/payouts (POST)', () => {
+    it('input validation - negative', () => {
+      return request(app.getHttpServer())
+        .post('/payouts')
+        .send({ userId: '074092', amount: -30 })
+        .expect(400);
+    });
+
+    it('input validation - positive', () => {
+      return request(app.getHttpServer())
+        .post('/payouts')
+        .send({ userId: '074092', amount: 30 })
+        .expect(201);
+    });
+  });
 });

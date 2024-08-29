@@ -3,6 +3,7 @@ import { Payout } from './entities/payout.entity';
 import { Transaction } from './entities/transaction.entity';
 import { TransactionService } from './transaction.service';
 import { getAll as getAllFromGenerator } from './generatorUtils';
+import { RequestPayout } from './dtos/requestPayout.dto';
 
 @Injectable()
 export class PayoutsService {
@@ -28,5 +29,9 @@ export class PayoutsService {
     return PayoutsService.payoutsFromTransactions(
       await getAllFromGenerator(this.transactionService.transactions()),
     );
+  }
+
+  async requestPayout(requestPayout: RequestPayout): Promise<RequestPayout> {
+    return requestPayout;
   }
 }
