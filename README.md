@@ -1,6 +1,6 @@
-# Tech Challenge response for Spirii
+# Tech Challenge using Nest.JS
 
-This repo contains the response for the tech challenge posed by Spirii.
+This repo contains the response for the tech challenge using Nest.JS.
 
 ## Input
 
