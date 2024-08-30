@@ -136,4 +136,10 @@ describe('AppController (e2e)', () => {
         .expect(201);
     });
   });
+
+  describe('WeatherModule', () => {
+    it('fetch', () => {
+      return request(app.getHttpServer()).post('/weather').expect(201);
+    });
+  });
 });
