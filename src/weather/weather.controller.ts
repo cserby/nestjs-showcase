@@ -1,5 +1,6 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { WeatherService } from './weather.service';
+import { WeatherApiResponse } from './dto/weatherApiResponse.dto';
 
 @Controller('weather')
 export class WeatherController {
@@ -13,5 +14,10 @@ export class WeatherController {
   @Post()
   async fetch() {
     return await this.weatherService.fetch();
+  }
+
+  @Put()
+  store(@Body() weatherApiResponse: WeatherApiResponse) {
+    return this.weatherService.storeWeather(weatherApiResponse);
   }
 }
