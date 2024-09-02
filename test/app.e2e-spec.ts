@@ -6,6 +6,7 @@ import { HttpService } from '@nestjs/axios';
 import { Observable } from 'rxjs';
 import { AxiosHeaders, AxiosResponse } from 'axios';
 import { TransactionsApiResponse } from 'src/ledger/transaction.service';
+import { execSync } from 'child_process';
 
 function mockTransactionServiceResponse(): Observable<
   AxiosResponse<TransactionsApiResponse>
@@ -54,6 +55,16 @@ function mockTransactionServiceResponse(): Observable<
     s.complete();
   });
 }
+
+beforeAll(() => {
+  console.log('Starting db');
+  execSync('yarn db:start');
+});
+
+afterAll(() => {
+  console.log('Stopping db');
+  execSync('yarn db:stop');
+});
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
