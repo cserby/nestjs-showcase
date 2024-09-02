@@ -7,6 +7,6 @@ export class IIOTController {
 
   @Get()
   findAll() {
-    return this.iiotService.findAll();
+    return this.iiotService.findAllDevices();
   }
 }

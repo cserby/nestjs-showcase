@@ -10,6 +10,7 @@ import { types as pgTypes } from 'pg';
 import { ScheduleModule } from '@nestjs/schedule';
 import { IIOTModule } from './iiot/iiot.module';
 import { IIOTDevice } from './iiot/entities/iiotDevice.entity';
+import { IIOTDeviceTelemetry } from './iiot/entities/iiotDeviceTelemetry.entity';
 
 pgTypes.setTypeParser(pgTypes.builtins.NUMERIC, (val) => Number(val));
 
@@ -23,7 +24,7 @@ pgTypes.setTypeParser(pgTypes.builtins.NUMERIC, (val) => Number(val));
       port: 5432,
       password: 'mysecretpassword',
       username: 'postgres',
-      entities: [Weather, IIOTDevice],
+      entities: [Weather, IIOTDevice, IIOTDeviceTelemetry],
       database: 'postgres',
       synchronize: true,
       logging: true,

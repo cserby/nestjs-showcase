@@ -2,16 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
+  OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-
-export enum IIOTDeviceState {
-  ON = 'on',
-  OFF = 'off',
-}
+import { IIOTDeviceTelemetry } from './iiotDeviceTelemetry.entity';
 
 @Entity()
 export class IIOTDevice {
@@ -20,6 +18,7 @@ export class IIOTDevice {
 
   @PrimaryColumn()
   @Unique('deviceId', ['deviceId'])
+  @Index({ unique: true })
   deviceId: string;
 
   @CreateDateColumn({ name: 'created_at' })
@@ -37,6 +36,6 @@ export class IIOTDevice {
   @Column({ type: 'timestamp', nullable: true })
   lastDisconnection: Date;
 
-  @Column({ type: 'enum', enum: IIOTDeviceState, default: IIOTDeviceState.ON })
-  state: IIOTDeviceState;
+  @OneToMany(() => IIOTDeviceTelemetry, (telemetry) => telemetry.device)
+  telemetries: IIOTDeviceTelemetry[];
 }
