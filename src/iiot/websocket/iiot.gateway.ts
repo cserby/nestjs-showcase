@@ -69,9 +69,8 @@ export class IIOTGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
   ) {
     const deviceId = this.getDeviceId(client);
-    this.logger.log(`Received telemetry from ${deviceId}: ${data}`);
     this.iiotService.insertTelemetry(deviceId, data.telemetry);
-    client.emit('ack', { messageId: data.messageId });
-    console.error('Emitted ack');
+    this.server.to(client.id).emit('ack', { messageId: data.messageId });
+    this.logger.log(`Received telemetry from ${deviceId}: ${data}`);
   }
 }
