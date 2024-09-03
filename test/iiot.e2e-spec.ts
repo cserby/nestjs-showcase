@@ -39,6 +39,16 @@ describe('EventsGateway', () => {
   });
 
   describe('Connection', () => {
+    it('Requires deviceId', async () => {
+      const socket = io('http://localhost:3000');
+      await new Promise<void>((resolve) =>
+        socket.on('connect_error', (err) => {
+          expect(err.message).toBe('Unauthorized');
+          resolve();
+        }),
+      );
+    });
+
     it('Tracks connection state', async () => {
       await withSocket('connectionStateTest', async (_socket) => {
         request(app.getHttpServer())
