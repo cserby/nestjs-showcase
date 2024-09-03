@@ -27,7 +27,7 @@ pgTypes.setTypeParser(pgTypes.builtins.NUMERIC, (val) => Number(val));
       entities: [Weather, IIOTDevice, IIOTDeviceTelemetry],
       database: 'postgres',
       synchronize: true,
-      logging: true,
+      logging: false,
     }),
     ScheduleModule.forRoot(),
     IIOTModule,
