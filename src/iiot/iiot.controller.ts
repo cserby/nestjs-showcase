@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { IIOTService } from './iiot.service';
 
 @Controller('iiot')
