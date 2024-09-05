@@ -70,7 +70,7 @@ describe('AppController (e2e)', () => {
   let app: INestApplication;
   let httpService: HttpService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -78,6 +78,10 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     httpService = moduleFixture.get<HttpService>(HttpService);
     await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   it('/ (GET)', () => {
