@@ -66,6 +66,9 @@ The solution exposes persisted data about the IIoT devices:
 * Telemetry data received from the devices
 in the form of an HTTP API: `GET /iiot`, implemented in [iiot.controller.ts]().
 
+The endpoint `POST /iiot/:deviceId` allows HTTP users to request configuration changes from the device.
+The communication channel between the HTTP Controller and the WebSocket Gateway is an RxJS Observable.
+
 # IIoT Platform Architecture
 
 ## Services

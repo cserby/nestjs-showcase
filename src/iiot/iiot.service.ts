@@ -3,11 +3,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { InsertResult, Repository } from 'typeorm';
 import { IIOTDevice } from './entities/iiotDevice.entity';
 import { IIOTDeviceTelemetry } from './entities/iiotDeviceTelemetry.entity';
-import { Telemetry } from './websocket/websocket.interface';
+import { Subject } from 'rxjs';
+import { Telemetry } from './schemas/telemetry.schema';
+import { DeviceConfig } from './schemas/deviceConfig.schema';
 
 @Injectable()
 export class IIOTService {
   private readonly logger = new Logger(IIOTService.name);
+
+  private readonly setConfigMessage$$ = new Subject<{
+    deviceId: string;
+    config: DeviceConfig;
+  }>();
+
+  readonly setConfigMessage$ = this.setConfigMessage$$.asObservable();
 
   constructor(
     @InjectRepository(IIOTDevice)
@@ -46,5 +55,13 @@ export class IIOTService {
     telemetryEntity.sensorB = telemetry.sensorB;
 
     return this.iiotDeviceTelemetryRepository.insert(telemetryEntity);
+  }
+
+  requestSetConfig(deviceId: string, config: DeviceConfig): void {
+    this.logger.log('Requesting set config', { deviceId, config });
+    if (!this.findDeviceById(deviceId)) {
+      throw new Error(`Device with ID ${deviceId} not found`);
+    }
+    this.setConfigMessage$$.next({ deviceId, config });
   }
 }

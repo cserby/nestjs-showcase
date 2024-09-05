@@ -1,12 +1,6 @@
 import { z } from 'zod';
-
-export const telemetrySchema = z.object({
-  timestamp: z.coerce.date(),
-  sensorA: z.number().positive(),
-  sensorB: z.number(),
-});
-
-export type Telemetry = z.infer<typeof telemetrySchema>;
+import { telemetrySchema } from '../schemas/telemetry.schema';
+import { DeviceConfig } from '../schemas/deviceConfig.schema';
 
 export const sendTelemetrySchema = z.object({
   messageId: z.number().int(),
@@ -24,8 +18,10 @@ export type Ack = z.infer<typeof ackSchema>;
 export interface ServerToClientEvents {
   ack: (e: Ack) => void;
   exception: (e: { status: string; message: string }) => void;
+  setConfig: (c: DeviceConfig) => void;
 }
 
 export interface ClientToServerEvents {
   telemetry: (e: SendTelemetry) => void;
+  config: (c: DeviceConfig) => void;
 }

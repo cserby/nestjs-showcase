@@ -1,12 +1,14 @@
 import { PipeTransform, Injectable, Logger } from '@nestjs/common';
-import { WsException } from '@nestjs/websockets';
 import z from 'zod';
 
 @Injectable()
 export class ZodValidationPipe implements PipeTransform {
   private readonly logger = new Logger(ZodValidationPipe.name);
 
-  constructor(private readonly schema: z.ZodSchema) {}
+  constructor(
+    private readonly schema: z.ZodSchema,
+    private readonly exceptionFactory: (msg: string) => Error,
+  ) {}
 
   transform(value: any) {
     try {
@@ -15,7 +17,7 @@ export class ZodValidationPipe implements PipeTransform {
       return value;
     } catch (error) {
       this.logger.error(error.errors);
-      throw new WsException('Validation failed');
+      throw this.exceptionFactory('Validation failed');
     }
   }
 }

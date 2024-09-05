@@ -149,6 +149,40 @@ describe('EventsGateway', () => {
     });
   });
 
+  describe('Set config', () => {
+    it('Sends config to the device', async () => {
+      await withSocket('setConfigTest', async (socket) => {
+        await new Promise<void>((expectedEventReceivedOverWs) => {
+          socket.on('setConfig', (config) => {
+            expect(config).toEqual({
+              sensorSettings: {
+                sensorA: { enabled: true, threshold: 42 },
+                sensorB: { enabled: true, threshold: 1337 },
+              },
+              softwareVersion: 'v1.2.3-alpha',
+            });
+            expectedEventReceivedOverWs();
+          });
+
+          request(app.getHttpServer())
+            .post('/iiot/setConfigTest')
+            .send({
+              sensorSettings: {
+                sensorA: { enabled: true, threshold: 42 },
+                sensorB: { enabled: true, threshold: 1337 },
+              },
+              softwareVersion: 'v1.2.3-alpha',
+            })
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .then((res) => {
+              expect(res.status).toBe(201);
+            });
+        });
+      });
+    });
+  });
+
   afterAll(async () => {
     await app.close();
   });
