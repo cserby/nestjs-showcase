@@ -23,6 +23,7 @@ export type Ack = z.infer<typeof ackSchema>;
 
 export interface ServerToClientEvents {
   ack: (e: Ack) => void;
+  exception: (e: { status: string; message: string }) => void;
 }
 
 export interface ClientToServerEvents {

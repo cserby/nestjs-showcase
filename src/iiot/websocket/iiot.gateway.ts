@@ -8,7 +8,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { IIOTAuthWsMiddleware } from '../iiotAuth.wsMiddleware';
+import { IIOTAuthWsMiddleware } from '../middlewares/iiotAuth.wsMiddleware';
 import { IIOTService } from '../iiot.service';
 import {
   ClientToServerEvents,
@@ -35,7 +35,7 @@ export class IIOTGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger(IIOTGateway.name);
 
   async afterInit() {
-    this.server.use(IIOTAuthWsMiddleware());
+    this.server.use(IIOTAuthWsMiddleware(this.logger));
   }
 
   getDeviceId(client: Socket): string {

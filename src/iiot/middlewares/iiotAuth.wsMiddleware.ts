@@ -1,8 +1,9 @@
+import { Logger } from '@nestjs/common/services';
 import { Socket } from 'socket.io';
 
 type SocketMiddleware = (socket: Socket, next: (err?: Error) => void) => void;
 
-export const IIOTAuthWsMiddleware = (): SocketMiddleware => {
+export const IIOTAuthWsMiddleware = (logger: Logger): SocketMiddleware => {
   return async (socket: Socket, next) => {
     try {
       const deviceId = socket.handshake?.auth?.deviceId;
@@ -17,7 +18,7 @@ export const IIOTAuthWsMiddleware = (): SocketMiddleware => {
 
       next();
     } catch (error) {
-      console.error(`Auth error: ${error.message}`);
+      logger.error(`Auth error: ${error.message}`);
       next(new Error('Unauthorized'));
     }
   };

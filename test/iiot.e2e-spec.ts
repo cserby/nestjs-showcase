@@ -87,11 +87,18 @@ describe('EventsGateway', () => {
   });
 
   describe('Telemetry', () => {
-    it.only('Validates telemetry input shape', async () => {
-      await withSocket('telemetryTest', async (socket) => {
-        await new Promise<void>((resolve) => {
-          socket.on('disconnect', () => {
-            resolve();
+    it('Validates telemetry input shape', async () => {
+      await withSocket('telemetryShapeCheck', async (socket) => {
+        await new Promise<void>((resolve, reject) => {
+          socket.on('exception', (error) => {
+            try {
+              expect(error).toEqual(
+                expect.objectContaining({ message: 'Validation failed' }),
+              );
+              resolve();
+            } catch (error) {
+              reject(error);
+            }
           });
           // @ts-expect-error Invalid shape for telemetry
           socket.emit('telemetry', { messageId: 42 });
